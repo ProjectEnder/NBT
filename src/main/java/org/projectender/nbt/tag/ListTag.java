@@ -2,14 +2,15 @@ package org.projectender.nbt.tag;
 
 import org.projectender.nbt.TagType;
 
+import javax.annotation.Nonnull;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
-public class ListTag<T extends Tag> extends Tag {
+public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
 
     private List<T> list = new ArrayList<>();
     private byte type;
@@ -85,5 +86,11 @@ public class ListTag<T extends Tag> extends Tag {
         result = result * PRIME + ($list == null ? 43 : $list.hashCode());
         result = result * PRIME + this.getType().ordinal();
         return result;
+    }
+
+    @Override
+    @Nonnull
+    public Iterator<T> iterator() {
+        return this.list.iterator();
     }
 }
