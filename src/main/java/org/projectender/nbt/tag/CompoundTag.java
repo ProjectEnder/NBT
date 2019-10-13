@@ -162,6 +162,11 @@ public final class CompoundTag extends Tag {
         return tag != null ? tag.getValue() : new int[0];
     }
 
+    public long[] getLongArray(@Nonnull String name) {
+        LongArrayTag tag = (LongArrayTag) this.tags.get(name);
+        return tag != null ? tag.getValue() : new long[0];
+    }
+
     public CompoundTag getCompound(@Nonnull String name) {
         CompoundTag tag = (CompoundTag) this.tags.get(name);
         return tag != null ? tag : new CompoundTag(name);
