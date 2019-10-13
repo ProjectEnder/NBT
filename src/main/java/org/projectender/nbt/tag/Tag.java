@@ -2,8 +2,7 @@ package org.projectender.nbt.tag;
 
 import org.projectender.nbt.NBTUtils;
 import org.projectender.nbt.TagType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.projectender.nbt.exception.NBTException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -12,8 +11,6 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 public abstract class Tag {
-
-    private static final Logger logger = LoggerFactory.getLogger(Tag.class);
 
     private final String name;
 
@@ -50,13 +47,13 @@ public abstract class Tag {
             }
             tag.write(outputStream);
         } catch (IOException e) {
-            logger.error("Failed to write {} ({}) to stream", tag.getType().getName(), tag.getName(), e);
+            throw new NBTException("Failed to write " + tag.getType().getName() + " to stream", e);
         }
     }
 
     @Nonnull
     public static Tag readTag(DataInput in) {
-        Tag tag = new EndTag();
+        Tag tag;
         try {
             byte b = in.readByte();
             if (b == 0) return new EndTag();
@@ -65,7 +62,7 @@ public abstract class Tag {
 
             tag.read(in);
         } catch (IOException e) {
-            logger.error("Failed to read from stream", e);
+            throw new NBTException("Failed to read from stream", e);
         }
         return tag;
     }
@@ -73,6 +70,7 @@ public abstract class Tag {
     public static Tag newTag(byte type, @Nullable String name) {
         TagType tagType = TagType.class.getEnumConstants()[type];
         switch (tagType) {
+            default:
             case END:
                 return new EndTag();
             case BYTE:
@@ -99,9 +97,6 @@ public abstract class Tag {
                 return new IntArrayTag(name);
             case LONG_ARRAY:
                 return new LongArrayTag(name);
-            default:
-                logger.warn("Invalid tag with ID of {}!!", type);
-                return new EndTag();
         }
     }
 }
