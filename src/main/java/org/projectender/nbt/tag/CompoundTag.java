@@ -17,7 +17,7 @@ public final class CompoundTag extends Tag {
     private final Map<String, Tag> tags = new LinkedHashMap<>();
 
     public CompoundTag() {
-        super(null);
+        super("");
     }
 
     public CompoundTag(@Nullable String name) {
