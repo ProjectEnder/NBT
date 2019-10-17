@@ -8,12 +8,13 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public final class CompoundTag extends Tag {
 
-    private final Map<String, Tag> tags = new HashMap<>();
+    private final Map<String, Tag> tags = new LinkedHashMap<>();
 
     public CompoundTag() {
         super(null);
@@ -180,6 +181,72 @@ public final class CompoundTag extends Tag {
 
     public boolean getBoolean(String name) {
         return getByte(name) != 0;
+    }
+
+    /////////////////////////////////////////////////////////////
+    // Optionals
+    /////////////////////////////////////////////////////////////
+    public Optional<Byte> getOptionalByte(@Nonnull String name) {
+        ByteTag tag = (ByteTag) this.tags.get(name);
+        return tag == null ? Optional.empty() : Optional.of(tag.getValue());
+    }
+
+    public Optional<Short> getOptionalShort(@Nonnull String name) {
+        ShortTag tag = (ShortTag) this.tags.get(name);
+        return tag == null ? Optional.empty() : Optional.of(tag.getValue());
+    }
+
+    public Optional<Integer> getOptionalInt(@Nonnull String name) {
+        IntTag tag = (IntTag) this.tags.get(name);
+        return tag == null ? Optional.empty() : Optional.of(tag.getValue());
+    }
+
+    public Optional<Long> getOptionalLong(@Nonnull String name) {
+        LongTag tag = (LongTag) this.tags.get(name);
+        return tag == null ? Optional.empty() : Optional.of(tag.getValue());
+    }
+
+    public Optional<Float> getOptionalFloat(@Nonnull String name) {
+        FloatTag tag = (FloatTag) this.tags.get(name);
+        return tag == null ? Optional.empty() : Optional.of(tag.getValue());
+    }
+
+    public Optional<Double> getOptionalDouble(@Nonnull String name) {
+        DoubleTag tag = (DoubleTag) this.tags.get(name);
+        return tag == null ? Optional.empty() : Optional.of(tag.getValue());
+    }
+
+    public Optional<String> getOptionalString(@Nonnull String name) {
+        StringTag tag = (StringTag) this.tags.get(name);
+        return tag == null ? Optional.empty() : Optional.of(tag.getValue());
+    }
+
+    public Optional<byte[]> getOptionalByteArray(@Nonnull String name) {
+        ByteArrayTag tag = (ByteArrayTag) this.tags.get(name);
+        return tag == null ? Optional.empty() : Optional.of(tag.getValue());
+    }
+
+    public Optional<int[]> getOptionalIntArray(@Nonnull String name) {
+        IntArrayTag tag = (IntArrayTag) this.tags.get(name);
+        return tag == null ? Optional.empty() : Optional.of(tag.getValue());
+    }
+
+    public Optional<long[]> getOptionalLongArray(@Nonnull String name) {
+        LongArrayTag tag = (LongArrayTag) this.tags.get(name);
+        return tag == null ? Optional.empty() : Optional.of(tag.getValue());
+    }
+
+    public Optional<CompoundTag> getOptionalCompound(@Nonnull String name) {
+        return Optional.ofNullable((CompoundTag) this.tags.get(name));
+    }
+
+    @SuppressWarnings("unchecked")
+    public Optional<ListTag<? extends Tag>> getOptionalList(@Nonnull String name) {
+        return Optional.ofNullable((ListTag) this.tags.get(name));
+    }
+
+    public Optional<Boolean> getOptionalBoolean(String name) {
+        return getOptionalByte(name).map(b -> b == 0);
     }
 
     public boolean isEmpty() {
