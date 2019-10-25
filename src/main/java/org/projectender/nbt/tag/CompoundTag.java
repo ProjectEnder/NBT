@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 public final class CompoundTag extends Tag {
 
@@ -110,6 +111,11 @@ public final class CompoundTag extends Tag {
         putByte(string, val ? (byte) 1 : 0);
     }
 
+    public void putUUID(@Nonnull UUID id) {
+        putLong("MostSignificantBits", id.getMostSignificantBits());
+        putLong("LeastSignificantBits", id.getLeastSignificantBits());
+    }
+
     public Tag get(@Nonnull String name) {
         return tags.get(name);
     }
@@ -181,6 +187,10 @@ public final class CompoundTag extends Tag {
 
     public boolean getBoolean(String name) {
         return getByte(name) != 0;
+    }
+
+    public UUID getUUID() {
+        return new UUID(getLong("MostSignificantBits"), getLong("LeastSignificantBits"));
     }
 
     /////////////////////////////////////////////////////////////
