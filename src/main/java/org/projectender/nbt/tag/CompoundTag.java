@@ -259,6 +259,15 @@ public final class CompoundTag extends Tag {
         return getOptionalByte(name).map(b -> b == 0);
     }
 
+    public Optional<UUID> getOptionalUUID() {
+        Optional<Long> most = getOptionalLong("MostSignificantBits");
+        Optional<Long> least = getOptionalLong("LeastSignificantBits");
+        if (most.isPresent() && least.isPresent())
+            return Optional.of(new UUID(most.get(), least.get()));
+        
+        return Optional.empty();
+    }
+
     public boolean isEmpty() {
         return tags.isEmpty();
     }
