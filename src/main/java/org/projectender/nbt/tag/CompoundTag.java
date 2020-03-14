@@ -185,6 +185,12 @@ public final class CompoundTag extends Tag {
         return tag != null ? tag : new ListTag<>();
     }
 
+    @SuppressWarnings("unchecked")
+    public <T extends Tag> ListTag<T> getList(@Nonnull String name, Class<T> type) {
+        ListTag<T> tag = (ListTag<T>) this.tags.get(name);
+        return tag != null ? tag : new ListTag<>();
+    }
+
     public boolean getBoolean(String name) {
         return getByte(name) != 0;
     }
