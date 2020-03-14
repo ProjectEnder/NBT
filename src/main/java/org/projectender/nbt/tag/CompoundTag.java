@@ -182,13 +182,13 @@ public final class CompoundTag extends Tag {
     @SuppressWarnings("unchecked")
     public ListTag<? extends Tag> getList(@Nonnull String name) {
         ListTag tag = (ListTag) this.tags.get(name);
-        return tag != null ? tag : new ListTag<>();
+        return tag != null ? tag : new ListTag<>(name);
     }
 
     @SuppressWarnings("unchecked")
     public <T extends Tag> ListTag<T> getList(@Nonnull String name, Class<T> type) {
         ListTag<T> tag = (ListTag<T>) this.tags.get(name);
-        return tag != null ? tag : new ListTag<>();
+        return tag != null ? tag : new ListTag<>(name);
     }
 
     public boolean getBoolean(String name) {
@@ -259,6 +259,11 @@ public final class CompoundTag extends Tag {
     @SuppressWarnings("unchecked")
     public Optional<ListTag<? extends Tag>> getOptionalList(@Nonnull String name) {
         return Optional.ofNullable((ListTag) this.tags.get(name));
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends Tag> Optional<ListTag<T>> getOptionalList(@Nonnull String name, Class<T> type) {
+        return Optional.ofNullable((ListTag<T>) this.tags.get(name));
     }
 
     public Optional<Boolean> getOptionalBoolean(String name) {
