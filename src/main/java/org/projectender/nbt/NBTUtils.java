@@ -55,10 +55,12 @@ public final class NBTUtils {
                 sb.append(((FloatTag) tag).getValue());
                 break;
             case DOUBLE:
-                sb.append(String.format("%.12f", ((DoubleTag) tag).getValue()));
+                final double d = ((DoubleTag) tag).getValue();
+
+                sb.append(d % 1 == 0 ? String.format("%.0f", d) : String.format("%.12f", d));
                 break;
             case BYTE_ARRAY:
-                sb.append(Arrays.toString(((ByteArrayTag) tag).getValue()));
+                sb.append(printArray(((ByteArrayTag) tag).getValue(), verbose));
                 break;
             case STRING:
                 sb.append('\'').append(((StringTag) tag).getValue()).append('\'');
@@ -102,6 +104,16 @@ public final class NBTUtils {
     }
 
     private static String printArray(int[] arr, boolean verbose) {
+        // Max of 20 values or all if verbose
+        String arrayAsString = Arrays.toString(verbose ? arr : Arrays.copyOfRange(arr, 0, Math.min(20, arr.length)));
+        // If it was cut off then remove the ending square bracket to add 3 dots and re-add square bracket
+        if (arr.length > 20 && !verbose)
+            arrayAsString = arrayAsString.substring(0, arrayAsString.length() - 1) + "...]";
+
+        return arrayAsString + " (" + arr.length + " values)";
+    }
+
+    private static String printArray(byte[] arr, boolean verbose) {
         // Max of 20 values or all if verbose
         String arrayAsString = Arrays.toString(verbose ? arr : Arrays.copyOfRange(arr, 0, Math.min(20, arr.length)));
         // If it was cut off then remove the ending square bracket to add 3 dots and re-add square bracket

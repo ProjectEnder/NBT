@@ -13,6 +13,8 @@ public class NBTUtilsTest {
         CompoundTag compoundTag = new CompoundTag("Test");
         compoundTag.putLong("TestLong", Long.MAX_VALUE);
         compoundTag.putLongArray("LongArr", new long[] {Long.MIN_VALUE, 0L, Long.MAX_VALUE});
+        compoundTag.putDouble("Double", 10000000);
+        compoundTag.putDouble("DoubleDecimal", 101.010101010101010101);
 
         CompoundTag tag = new CompoundTag("Some Compound");
 
@@ -22,10 +24,12 @@ public class NBTUtilsTest {
         tag.putList("List", list);
         compoundTag.putCompound(tag);
 
-        String expected = "TAG_Compound('Test'): 3 entries"
+        String expected = "TAG_Compound('Test'): 5 entries"
             + "\n{"
             + "\n  TAG_Long('TestLong'): 9223372036854775807"
             + "\n  TAG_Long_Array('LongArr'): [-9223372036854775808, 0, 9223372036854775807] (3 values)"
+            + "\n  TAG_Double('Double'): 10000000"
+            + "\n  TAG_Double('DoubleDecimal'): 101.010101010101"
             + "\n  TAG_Compound('Some Compound'): 1 entries"
             + "\n  {"
             + "\n    TAG_List(None): 1 entries"
