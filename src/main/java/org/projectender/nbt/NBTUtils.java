@@ -15,6 +15,9 @@ import org.projectender.nbt.tag.StringTag;
 import org.projectender.nbt.tag.Tag;
 
 import java.util.Arrays;
+import java.util.function.IntFunction;
+import java.util.function.IntSupplier;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -25,6 +28,10 @@ public final class NBTUtils {
     private NBTUtils() {}
 
     public static String toString(Tag tag) {
+        return toString(tag, false);
+    }
+
+    public static String toString(Tag tag, boolean verbose) {
         StringBuilder sb = new StringBuilder(tag.getType().getName())
             .append('(').append(tag.getName() == null || tag.getName().isEmpty()
                 ? "None" : '\'' + tag.getName() + '\'').append(')');
@@ -51,7 +58,7 @@ public final class NBTUtils {
                 sb.append(((FloatTag) tag).getValue());
                 break;
             case DOUBLE:
-                sb.append(((DoubleTag) tag).getValue());
+                sb.append(String.format("%.12f", ((DoubleTag) tag).getValue()));
                 break;
             case BYTE_ARRAY:
                 sb.append(Arrays.toString(((ByteArrayTag) tag).getValue()));
@@ -75,16 +82,36 @@ public final class NBTUtils {
                     .append("\n}");
                 break;
             case INT_ARRAY:
-                sb.append(Arrays.toString(((IntArrayTag) tag).getValue()));
+                sb.append(printArray(((IntArrayTag) tag).getValue(), verbose));
                 break;
             case LONG_ARRAY:
-                sb.append(Arrays.toString(((LongArrayTag) tag).getValue()));
+                sb.append(printArray(((LongArrayTag) tag).getValue(), verbose));
                 break;
             default:
                 break;
         }
 
         return sb.toString();
+    }
+
+    private static String printArray(long[] arr, boolean verbose) {
+        // Max of 20 values or all if verbose
+        String arrayAsString = Arrays.toString(verbose ? arr : Arrays.copyOfRange(arr, 0, Math.min(20, arr.length)));
+        // If it was cut off then remove the ending square bracket to add 3 dots and re-add square bracket
+        if (arr.length > 20 && !verbose)
+            arrayAsString = arrayAsString.substring(0, arrayAsString.length() - 1) + "...]";
+
+        return arrayAsString + " (" + arr.length + " values)";
+    }
+
+    private static String printArray(int[] arr, boolean verbose) {
+        // Max of 20 values or all if verbose
+        String arrayAsString = Arrays.toString(verbose ? arr : Arrays.copyOfRange(arr, 0, Math.min(20, arr.length)));
+        // If it was cut off then remove the ending square bracket to add 3 dots and re-add square bracket
+        if (arr.length > 20 && !verbose)
+            arrayAsString = arrayAsString.substring(0, arrayAsString.length() - 1) + "...]";
+
+        return arrayAsString + " (" + arr.length + " values)";
     }
 
     private static String toStringMapper(Tag tag) {
