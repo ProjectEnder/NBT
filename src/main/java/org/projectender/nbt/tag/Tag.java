@@ -34,7 +34,11 @@ public abstract class Tag {
 
     @Override
     public String toString() {
-        return NBTUtils.toString(this);
+        return toString(false);
+    }
+
+    public String toString(boolean verbose) {
+        return NBTUtils.toString(this, verbose);
     }
 
     public static void writeTag(Tag tag, DataOutput outputStream) {

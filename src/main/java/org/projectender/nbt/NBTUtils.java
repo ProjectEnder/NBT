@@ -69,14 +69,14 @@ public final class NBTUtils {
                 @SuppressWarnings("unchecked")
                 ListTag<Tag> list = (ListTag<Tag>) tag;
                 sb.append(list.getValue().size()).append(" entries").append("\n{\n")
-                    .append(list.getValue().stream().map(NBTUtils::toStringMapper)
+                    .append(list.getValue().stream().map(t -> NBTUtils.toStringMapper(t, verbose))
                         .collect(Collectors.joining("\n")))
                     .append("\n}");
                 break;
             case COMPOUND:
                 CompoundTag compound = (CompoundTag) tag;
                 sb.append(compound.getValue().size()).append(" entries").append("\n{\n")
-                    .append(compound.getValue().values().stream().map(NBTUtils::toStringMapper)
+                    .append(compound.getValue().values().stream().map(t -> NBTUtils.toStringMapper(t, verbose))
                         .collect(Collectors.joining("\n")))
                     .append("\n}");
                 break;
@@ -123,8 +123,8 @@ public final class NBTUtils {
         return arrayAsString + " (" + arr.length + " values)";
     }
 
-    private static String toStringMapper(Tag tag) {
-        String mapping = tag.toString();
+    private static String toStringMapper(Tag tag, boolean verbose) {
+        String mapping = tag.toString(verbose);
 
         if (mapping.contains("\n"))
             return Arrays.stream(SPLIT_NEW_LINE.split(mapping))
